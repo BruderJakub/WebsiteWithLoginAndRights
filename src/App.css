@@ -102,6 +102,8 @@ html, body, #root {
   display: flex;
   justify-content: space-between;
   align-items: center;
+  flex-wrap: wrap; /* Allow items to wrap on very small screens */
+  gap: 10px; /* Add gap for when items wrap */
   box-shadow: 0 2px 4px var(--shadow-light);
   transition: background-color var(--transition-speed), box-shadow var(--transition-speed);
 }
@@ -146,7 +148,7 @@ html, body, #root {
   padding: 20px;
   border-radius: 8px;
   box-shadow: 0 2px 4px var(--shadow-light);
-  height: 100%;
+  height: fit-content; /* Changed from 100% to fit its content */
   display: flex;
   flex-direction: column;
   transition: background-color var(--transition-speed), box-shadow var(--transition-speed);
@@ -165,11 +167,11 @@ html, body, #root {
   padding: 20px;
   border-radius: 8px;
   box-shadow: 0 2px 4px var(--shadow-light);
-  height: 100%;
+  min-height: 400px; /* Ensure it has some height even when empty */
   display: flex;
   flex-direction: column;
   align-items: center; /* Centers logged-in-content-wrapper horizontally */
-  justify-content: center; /* Centers logged-in-content-wrapper vertically if its content is smaller */
+  justify-content: center; /* Centers logged-in-content-wrapper vertically */
   transition: background-color var(--transition-speed), box-shadow var(--transition-speed);
 }
 
@@ -178,16 +180,16 @@ html, body, #root {
   display: flex;
   flex-direction: column;
   justify-content: space-between; /* Pushes top and bottom content apart */
-  height: 100%; /* Allows it to take up the full height of app-main-display */
-  width: 100%; /* Allows it to take up the full width of app-main-display */
-  text-align: center; /* Centers internal text like welcome messages */
+  height: 100%;
+  width: 100%;
+  text-align: center;
 }
 
 .logged-in-content-wrapper .welcome-title,
 .logged-in-content-wrapper .welcome-message,
 .logged-in-content-wrapper .footer-message {
-  margin-bottom: 10px; /* Adjust spacing */
-  margin-top: 10px; /* Adjust spacing */
+  margin-bottom: 10px;
+  margin-top: 10px;
   color: var(--text-body);
   transition: color var(--transition-speed);
 }
@@ -195,48 +197,48 @@ html, body, #root {
 /* NEW: Kiwi Grid Container */
 .kiwi-grid-container {
   display: grid;
-  /* max-width: 700px;  Optional: to prevent kiwis from spreading too wide if screen is huge */
-  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); /* Responsive grid, max 3 per row (each ~200px) */
-  gap: 25px; /* Space between kiwi cards */
-  justify-items: center; /* Center items within their grid cells */
-  align-items: start; /* Align items to the start of their cells vertically */
-  padding: 20px 0; /* Padding above/below the grid */
-  flex-grow: 1; /* Allow the grid to take up available vertical space */
-  width: 100%; /* Ensure the grid takes full width of its container */
-  max-width: 700px; /* Limit overall width of the grid to ensure 3 per row is reasonable */
-  margin: 0 auto; /* Center the grid container itself */
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 25px;
+  justify-items: center;
+  align-items: start;
+  padding: 20px 0;
+  flex-grow: 1;
+  width: 100%;
+  max-width: 700px;
+  margin: 0 auto;
 }
 
 /* NEW: Individual Kiwi Card Styling */
 .kiwi-card {
-  background-color: var(--bg-form-element); /* Card background */
+  background-color: var(--bg-form-element);
   border-radius: 8px;
   box-shadow: 0 4px 8px var(--shadow-light);
-  overflow: hidden; /* Ensures border-radius applies to image and description */
+  overflow: hidden;
   display: flex;
-  flex-direction: column; /* Stack image and text vertically */
-  align-items: center; /* Center content horizontally */
-  max-width: 220px; /* Max width for each card, slightly more than image */
-  width: 100%; /* Ensure it takes full width within its grid cell */
+  flex-direction: column;
+  align-items: center;
+  max-width: 220px;
+  width: 100%;
   transition: background-color var(--transition-speed), box-shadow var(--transition-speed);
 }
 
 .kiwi-image {
-  width: 100%; /* Image fills card width */
+  width: 100%;
   height: auto;
-  display: block; /* Remove extra space below image */
-  border-radius: 8px 8px 0 0; /* Match card top corners, flat bottom */
+  display: block;
+  border-radius: 8px 8px 0 0;
+  transition: box-shadow var(--transition-speed);
 }
 
 .kiwi-description-text {
-  background-color: var(--kiwi-description-bg); /* New variable for text background */
-  color: var(--kiwi-description-text);         /* New variable for text color */
-  padding: 10px 15px; /* Padding inside the description box */
-  width: 100%; /* Make description background fill card width */
-  margin: 0; /* Remove default paragraph margin */
+  background-color: var(--kiwi-description-bg);
+  color: var(--kiwi-description-text);
+  padding: 10px 15px;
+  width: 100%;
+  margin: 0;
   font-size: 0.95em;
   font-style: italic;
-  border-radius: 0 0 8px 8px; /* Match card bottom corners */
+  border-radius: 0 0 8px 8px;
   transition: background-color var(--transition-speed), color var(--transition-speed);
 }
 
@@ -291,12 +293,54 @@ form button[type="submit"] {
 }
 form button[type="submit"]:hover { background-color: var(--button-submit-hover-bg); }
 
-/* Styling for the "Switch to Login/Register" button (outside of AuthForm component) */
 .app-main-display > button {
   transition: background-color 0.2s ease;
 }
 
-/* Styling for Kiwi image (within a card now) */
-.kiwi-image {
-  transition: box-shadow var(--transition-speed); /* Smooth shadow transition */
+/* ---------------------------------------------------- */
+/* NEW: Responsive Styles */
+/* ---------------------------------------------------- */
+
+/* For tablets and smaller devices */
+@media (max-width: 800px) {
+  .app-main-content {
+    flex-direction: column; /* Stack sidebar and main content vertically */
+    padding: 15px;
+    gap: 15px;
+  }
+
+  .app-filters-sidebar {
+    width: 100%; /* Sidebar takes full width */
+    height: auto; /* Height adjusts to content */
+  }
+
+  .app-main-display {
+    padding: 15px;
+  }
+}
+
+/* For smaller mobile phones */
+@media (max-width: 480px) {
+  .app-header {
+    flex-direction: column; /* Stack header title and buttons */
+    align-items: flex-start; /* Align to the left */
+  }
+
+  .app-header-left h1 {
+    font-size: 1.2em; /* Reduce title font size */
+  }
+
+  .nav-button {
+    padding: 6px 12px;
+    font-size: 0.85em;
+  }
+
+  /* Reduce padding on the main content area for more space */
+  .app-main-content {
+    padding: 10px;
+  }
+
+  form {
+    padding: 15px; /* Reduce form padding */
+  }
 }
