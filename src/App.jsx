@@ -181,14 +181,6 @@ function App() {
 
             {/* Main Content Area */}
             <main className="app-main-content">
-                {/* Left Section (Filters) */}
-                <aside className="app-filters-sidebar">
-                    <h3>Filters</h3>
-                    <div style={{ padding: '15px', border: '1px dashed var(--border-dashed)', borderRadius: '5px', minHeight: '150px', display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'var(--text-secondary)' }}>
-                        Filter options will go here!
-                    </div>
-                </aside>
-
                 {/* Right Section (Main Display - Kiwi Grid or AuthForm) */}
                 <section className="app-main-display">
                     {currentView === 'accmgmt' ? (

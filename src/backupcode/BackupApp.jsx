@@ -68,11 +68,10 @@ function App() {
     const handleRegister = async (credentials) => {
         try {
             const userCredential = await createUserWithEmailAndPassword(auth, credentials.email, credentials.password);
-            // After successful registration, save the user's role to Firestore
             const userRef = doc(db, "users", userCredential.user.uid);
             await setDoc(userRef, { role: 'member' });
             alert('Registration successful! You are now logged in as a member.');
-            setCurrentView('main'); // Add this line to redirect
+            setCurrentView('main');
         } catch (error) {
             console.error('Registration failed:', error.message);
             alert(`Registration failed: ${error.message}`);
@@ -82,9 +81,7 @@ function App() {
     const handleLogin = async (credentials) => {
         try {
             await signInWithEmailAndPassword(auth, credentials.email, credentials.password);
-            // The onAuthStateChanged listener will handle state change,
-            // but you can also set the view here for immediate feedback.
-            setCurrentView('main'); // Add this line to redirect
+            setCurrentView('main');
         } catch (error) {
             console.error('Login failed:', error.message);
             alert(`Login failed: ${error.message}`);
@@ -113,6 +110,18 @@ function App() {
         return []; // Fallback
     };
 
+    // New function to handle admin button clicks
+    const handleAdminAction = (action, kiwi) => {
+        if (userRole === 'admin') {
+            alert(`Admin action: '${action}' performed on kiwi: '${kiwi.alt}'`);
+            // Here you would add the actual logic for a button action,
+            // e.g., deleting a document from Firestore.
+            // e.g., `deleteDoc(doc(db, "kiwis", kiwi.id));`
+        } else {
+            alert("Permission denied. You must be an admin to perform this action.");
+        }
+    };
+
     // Main Content of kiwi pictures
     const mainContent = (
         <div className="logged-in-content-wrapper">
@@ -130,6 +139,15 @@ function App() {
                             className="kiwi-image"
                         />
                         <p className="kiwi-description-text">{kiwi.description}</p>
+
+                        {/* Conditional Rendering for Admin-Only Buttons */}
+                        {userRole === 'admin' && (
+                            <div className="admin-buttons-container">
+                                <button className="admin-button" onClick={() => handleAdminAction('show', kiwi)}>Show</button>
+                                <button className="admin-button" onClick={() => handleAdminAction('hide', kiwi)}>Hide</button>
+                                <button className="admin-button" onClick={() => handleAdminAction('public', kiwi)}>Public</button>
+                            </div>
+                        )}
                     </div>
                 ))}
             </div>
